@@ -26,3 +26,12 @@
 *.exe
 *.out
 *.app
+
+# Debug Relase binary directories
+Debug
+Release
+debug
+release
+
+# Helper Shell scripts one might need
+*.sh
