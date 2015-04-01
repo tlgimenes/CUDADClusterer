@@ -27,6 +27,6 @@ labels:
 
 Credits
 --------------
-**Author:** Tiago LOBATO GIMENES: *tlgimenes@gmail.com* 
+**Author:** [Tiago LOBATO GIMENES](https://github.com/tlgimenes): *tlgimenes@gmail.com* 
 
 **Contributors:** Maybe you !
