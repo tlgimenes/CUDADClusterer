@@ -13,15 +13,17 @@
 #include "reader_xtc.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-
-void print_data(const std::vector<float>& data, int max)
+/**
+ * Function for visualizating max elements of the data of n_dimentions 
+ * */
+void print_data(const std::vector<float>& data, int max = 20, int dim = 3)
 {
-    for(int i=0; i < data.size() && i < 3*max; i+=3)
+    for(int i=0; i < data.size() && i < dim*max; i+=dim)
     {
-        std::cout << "(" << data[i] << ", " << data[i+1] << ", " << data[i+2] << ")" 
-            << std::endl;
-        if(!(((i+3)/3)%(22)))
-            std::cout << std::endl;
+        std::cout << "(" << data[i] << ", ";
+        for(int j=1; j < dim; j++)
+            std::cout << ", " << data[i+j];
+        std::cout << ")" << std::endl;
     }
     std::cout << std::endl;
 }
@@ -35,7 +37,7 @@ void print_data(const std::vector<float>& data, int max)
  */
 int main(int argc, const char **argv)
 {
-    /* Calls the parser */
+    /* Adds arguments to the parser */
     Parser::add_argument("-t", "List of trajectory files to read in, separated by spaces.");
     Parser::add_argument("-a", "List of atom index files to read in, separated by spaces.");
     Parser::add_argument("-p", "topology file.");
@@ -44,11 +46,12 @@ int main(int argc, const char **argv)
     Parser::add_argument("-r", "Use Random seed");
     Parser::add_argument("-s", "Seed of cluster.");
     Parser::add_argument("-x", "Number of snapshots in each xtc file.");
-    Parser::add_argument("-e", "The file extension of input trajectory files. Must be a filetype that mdtraj.load() can recognize.");
+    Parser::add_argument("-e", "The file extension of input trajectory files.");
     Parser::add_argument("-l", "Superpose each conformation in this trajectory upon a reference.");
 
-    Parser::parse(argc, argv);
+    Parser::parse(argc, argv); // Parses the input parameters
 
+    /* Starts parameters of the program */
     std::string trajlist = Parser::get("-t", true);
     std::string atom_index = Parser::get("-a", true);
     std::string topology = Parser::get("-p", true);
@@ -60,12 +63,13 @@ int main(int argc, const char **argv)
     std::string ext = Parser::get("-e", false);
     int ref = std::stoi(Parser::get("-l", false));
 
+    /* Reads the trajectory list and acquires the data and number of atoms */
     std::vector<float> data;
     int n_atoms;
 
     ReaderXTC::read_list(home_dir, trajlist, data, n_atoms);
 
-    //print_data(data, 123123);
+    //print_data(data, 123);
 
     return 0;
 }

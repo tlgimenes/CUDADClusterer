@@ -38,11 +38,22 @@ namespace bfs = boost::filesystem;
 class ReaderXTC
 {
     public:
+        /**
+         * Reads all trajectories specified in the trajlist file. A trajlist
+         * file can contains the relative paths to the .xtc files or name of
+         * files that contains relative paths to the .xtc files. The absolute
+         * path is always done in the following way : path = home/trajlist
+         * */
         static inline void read_list(const std::string& home, const std::string& trajlist,
                 std::vector<float>& data, int& n_atoms);
 
     protected:
-        static inline void read_file(const std::string& trajfile, std::vector<float>&
+        /**
+         * Reads a trajectory file. It can be *.xtc or any other file defined
+         * in _supported_ext vector and appends the new trajectories in the
+         * data vector
+         * */
+        static inline void read_trajfile(const std::string& trajfile, std::vector<float>&
                 data, int& n_atoms, int& n_samples);
 
         /**
@@ -53,9 +64,6 @@ class ReaderXTC
         static inline void get_framefile_list(std::vector<std::string>& framefile_list,
                 const std::string& home, const std::string& trajlist);
 
-        static inline void renormalize(std::vector<float>& data, int n_atoms, 
-                int n_samples);
-
         /**
          * Checks if the extension of file "file_name" is supported or not
          * by this class
@@ -63,14 +71,10 @@ class ReaderXTC
         static inline bool is_ext_supported(const std::string& file_name);
 
     private:
-        static XDRFILE* _xdr_file;
-
         static std::vector<std::string> _supported_ext;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-
-XDRFILE* ReaderXTC::_xdr_file;
 
 std::vector<std::string> ReaderXTC::_supported_ext = {".xtc"};
 
@@ -96,11 +100,9 @@ inline void ReaderXTC::read_list(const std::string& home, const std::string& tra
     for(std::string trajfile : trajlist)
     {
         std::cout << "Reading file: " << trajfile << " ... ";
-        ReaderXTC::read_file(trajfile, data, n_atoms, n_samples);
+        ReaderXTC::read_trajfile(trajfile, data, n_atoms, n_samples);
         std::cout << n_samples << " frames found" << std::endl;
     }
-
-    //ReaderXTC::renormalize(data, n_atoms, n_samples);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -120,20 +122,20 @@ inline bool ReaderXTC::is_ext_supported(const std::string& str)
 inline void ReaderXTC::get_framefile_list(std::vector<std::string>& trajlist,
         const std::string& home, const std::string& trajlinks_path)
 {
+    std::stringstream trajlinks; 
+    std::string sub_traj;
+
     // Recursion base, when file is a complete path
     if(ReaderXTC::is_ext_supported(trajlinks_path)) 
         trajlist.push_back(home + trajlinks_path);
     // when file is a link to a file
     else {
-        std::stringstream trajlinks; 
-        std::string sub_traj;
-
+        // Gets contents of the file 
         trajlinks << std::ifstream(home + trajlinks_path, std::ios_base::in).rdbuf();
         trajlinks >> sub_traj;
 
         while(trajlinks && !trajlinks.eof() && sub_traj.size() > 0) // Foreach link in the file
         {
-            //if(std::ifstream(home+sub_traj).good()) // if file is openable and is a link to other files
             if(bfs::is_regular_file(home+sub_traj)) // if file is openable and is a link to other files
                 ReaderXTC::get_framefile_list(trajlist, home, sub_traj);
             else if(bfs::is_regular_file(home+sub_traj+".xtc")) // if file without xtc extension
@@ -141,14 +143,14 @@ inline void ReaderXTC::get_framefile_list(std::vector<std::string>& trajlist,
             else  // default file name
                 trajlist.push_back(home+sub_traj+"/frame0.xtc");
 
-            trajlinks >> sub_traj;
+            trajlinks >> sub_traj; // gets new file/link
         }
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void ReaderXTC::read_file(const std::string& trajfile, 
+inline void ReaderXTC::read_trajfile(const std::string& trajfile, 
         std::vector<float> &data, int& n_atoms, int& n_samples)
 {
     int step;
@@ -157,11 +159,11 @@ inline void ReaderXTC::read_file(const std::string& trajfile,
     rvec* tmp = new rvec[n_atoms];
     n_samples = 0;
 
-    ReaderXTC::_xdr_file = xdrfile_open(trajfile.c_str(), "r"); // opens file
+    // Opens trajfile
+    XDRFILE *xdr_file = xdrfile_open(trajfile.c_str(), "r"); // opens file
 
-    // Count number of frames
-    while (exdrOK == read_xtc(ReaderXTC::_xdr_file, n_atoms, &step, &time, 
-                box, tmp, &prec)) {
+    // Reads each frame
+    while (exdrOK == read_xtc(xdr_file, n_atoms, &step, &time, box, tmp, &prec)) {
         for(int i=0; i < n_atoms; i++) {
             data.push_back(tmp[i][0]);
             data.push_back(tmp[i][1]);
@@ -170,43 +172,13 @@ inline void ReaderXTC::read_file(const std::string& trajfile,
         n_samples++;
     }
 
-    xdrfile_close(ReaderXTC::_xdr_file);
+    // Closes trajfile
+    xdrfile_close(xdr_file);
 
+    // Deletes allocated memory
     delete []tmp;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-
-inline void swap_small(std::vector<float>& data, int i, int j)
-{
-    float tmp = data[i];
-
-    data[i] = data[j];
-    data[j] = tmp;
-}
-
-inline void swap(std::vector<float>& data, int i, int j)
-{
-    register int ii = 3*i;
-    register int jj = 3*j;
-
-    swap_small(data, ii, jj);
-    swap_small(data, ii+1, jj+1);
-    swap_small(data, ii+2, jj+2);
-}
-
-inline void ReaderXTC::renormalize(std::vector<float>& data, int n_atoms, 
-        int n_samples)
-{
-    for(int i=0; i < n_samples; i++) 
-    {
-        for(int j=i+1; j < n_atoms; j++)
-        {
-            swap(data, i*n_atoms + j,  + n_atoms * j);
-        }
-    }
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 
