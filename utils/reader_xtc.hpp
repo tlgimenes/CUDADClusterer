@@ -35,7 +35,7 @@ namespace bfs = boost::filesystem;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class ReaderXTC
+class reader_xtc
 {
     public:
         /**
@@ -76,11 +76,11 @@ class ReaderXTC
 
 ///////////////////////////////////////////////////////////////////////////////
 
-std::vector<std::string> ReaderXTC::_supported_ext = {".xtc"};
+std::vector<std::string> reader_xtc::_supported_ext = {".xtc"};
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void ReaderXTC::read_list(const std::string& home, const std::string& trajlist_path, 
+inline void reader_xtc::read_list(const std::string& home, const std::string& trajlist_path, 
         std::vector<float>& data, int& n_atoms)
 {
     std::vector<std::string> trajlist;
@@ -88,7 +88,7 @@ inline void ReaderXTC::read_list(const std::string& home, const std::string& tra
 
     // Checks if file exists
     if(!bfs::is_regular_file(home+trajlist_path)) FATAL_ERROR(home+trajlist_path+": File not found :("); 
-    ReaderXTC::get_framefile_list(trajlist, home, trajlist_path);
+    reader_xtc::get_framefile_list(trajlist, home, trajlist_path);
 
     data.clear(); // clears data
 
@@ -99,17 +99,17 @@ inline void ReaderXTC::read_list(const std::string& home, const std::string& tra
     // Foreach file in trajlist
     for(std::string trajfile : trajlist)
     {
-        std::cout << "Reading file: " << trajfile << " ... ";
-        ReaderXTC::read_trajfile(trajfile, data, n_atoms, n_samples);
-        std::cout << n_samples << " frames found" << std::endl;
+        DBG_MESSAGE("Reading file: " + trajfile + " ... "); // Debug Message
+        reader_xtc::read_trajfile(trajfile, data, n_atoms, n_samples);
+        DBG_MESSAGE(std::to_string(n_samples) + " frames found\n"); // Debug Message
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline bool ReaderXTC::is_ext_supported(const std::string& str)
+inline bool reader_xtc::is_ext_supported(const std::string& str)
 {
-    for(std::string l : ReaderXTC::_supported_ext)
+    for(std::string l : reader_xtc::_supported_ext)
     {
         if(!str.compare(str.size()-4, 4, l))
             return true;
@@ -119,14 +119,14 @@ inline bool ReaderXTC::is_ext_supported(const std::string& str)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void ReaderXTC::get_framefile_list(std::vector<std::string>& trajlist,
+inline void reader_xtc::get_framefile_list(std::vector<std::string>& trajlist,
         const std::string& home, const std::string& trajlinks_path)
 {
     std::stringstream trajlinks; 
     std::string sub_traj;
 
     // Recursion base, when file is a complete path
-    if(ReaderXTC::is_ext_supported(trajlinks_path)) 
+    if(reader_xtc::is_ext_supported(trajlinks_path)) 
         trajlist.push_back(home + trajlinks_path);
     // when file is a link to a file
     else {
@@ -137,7 +137,7 @@ inline void ReaderXTC::get_framefile_list(std::vector<std::string>& trajlist,
         while(trajlinks && !trajlinks.eof() && sub_traj.size() > 0) // Foreach link in the file
         {
             if(bfs::is_regular_file(home+sub_traj)) // if file is openable and is a link to other files
-                ReaderXTC::get_framefile_list(trajlist, home, sub_traj);
+                reader_xtc::get_framefile_list(trajlist, home, sub_traj);
             else if(bfs::is_regular_file(home+sub_traj+".xtc")) // if file without xtc extension
                 trajlist.push_back(home+sub_traj+".xtc");
             else  // default file name
@@ -150,7 +150,7 @@ inline void ReaderXTC::get_framefile_list(std::vector<std::string>& trajlist,
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void ReaderXTC::read_trajfile(const std::string& trajfile, 
+inline void reader_xtc::read_trajfile(const std::string& trajfile, 
         std::vector<float> &data, int& n_atoms, int& n_samples)
 {
     int step;

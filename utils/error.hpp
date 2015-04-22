@@ -41,11 +41,13 @@ static void __warning(const std::string& error_code, const std::string& file, in
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef NDEBUG
+#define DBG_MESSAGE(str) // Message displayed in debug only mode
 #define FATAL_ERROR(str)
 #define WARNING_ERROR(str)
 #define ASSERT_FATAL_ERROR(boolean, str)
 #define ASSERT_WARNING_ERROR(boolean, str)
 #else
+#define DBG_MESSAGE(str) std::cout << str // Message displayed in debug only mode
 #define FATAL_ERROR(str) __error(str, __FILE__, __LINE__)
 #define WARNING_ERROR(str) __warning(str, __FILE__, __LINE__)
 #define ASSERT_FATAL_ERROR(boolean, str) (void)((boolean) || (__error(str, __FILE__, __LINE__),0))

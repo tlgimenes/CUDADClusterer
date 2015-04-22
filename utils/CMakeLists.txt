@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION 3.2.1)
 
 set(LIB_NAME utils)
-set(SRC error.hpp reader_xtc.hpp)
+set(SRC error.hpp reader_xtc.hpp types.hpp)
 
 # creats library
 add_library(${LIB_NAME} STATIC ${SRC})
