@@ -1,11 +1,14 @@
-/*
- * ============================================================================
- *       Filename:  vp_tree_cpu.hpp
- *    Description:  
- *        Created:  2015-04-20 21:58
- *         Author:  Tiago Lobato Gimenes        (tlgimenes@gmail.com)
- * ============================================================================
- */
+/*============================================================================*/
+/*! \file vp_tree_cpu.hpp 
+ *  \author Tiago LOBATO GIMENES            (tlgimenes@gmail.com)
+ *  \date 2015-04-20 21:58
+ *
+ *  \brief vp_tree cpu class especification 
+ *
+ *  This file contains the cpu specialization of vp_tree class
+ * */
+/*============================================================================*/
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -23,66 +26,104 @@
 #include "time.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
+/*! \brief Float comparision threshold 
+ *
+ * If the modulus of the difference between two floats is smaller than this
+ * value the float values are considered to be equal */
+#define EPSILON 1e-6 
 
-#define EPSILON 1e-6
-
-#define LEAF -1
-#define ROOT -2
-#define UNDEF -3
+#define LEAF -1  /*!< Leaf descriptor */
+#define ROOT -2  /*!< Root descriptor */
+#define UNDEF -3 /*!< Undefined node descriptor */
 
 ///////////////////////////////////////////////////////////////////////////////
 
+namespace tree{
 namespace cpu
 {
-    class vp_tree : public tree
+    /*! \brief Base class for creating vp-tree */
+    class vp_tree : public tree::vp_tree
     {
         public:
-            vp_tree(const std::vector<float>& data, int dim, 
-              float (*metric)(int,int,const std::vector<float>&,int)=euclidean2);
+            /*! \brief Constructs a new vp-tree
+             *
+             * \param data Data for creating vp-tree
+             * \param dim Dimention of the data
+             * \param metric metric function used in the vp-tree
+             * */
+            vp_tree(std::shared_ptr<const std::vector<float>> data, int dim, 
+                    metric::cpu::metric_f metric = metric::cpu::euclidean);
 
             /**
-             * Finds the query in _data vector and returns its index in the 
-             * _tree 
+             * \brief Performs the knn search and returns all elements within the 
+             * radius delta of the query.
+             *
+             * \param query index of query in the data
+             * \param delta maximum distance exclusive to search
+             * \param id ids of elements in data closer to query than delta
+             * */
+            inline void knn(int query, float delta, std::vector<int>& id);
+
+            /**
+             * \brief Performs the knn search and returns k elements closest to the 
+             * query
+             * */
+            inline void knn(int query, int k, std::vector<int>& id);
+
+            /**
+             * \brief Same function as knn but using the brute force algorithm
+             * */
+            inline void brute_knn(int query, float delta, std::vector<int>& id);
+            
+            /**
+             * \brief Same function as knn but using the brute force algorithm
+             * */
+            inline void brute_knn(int query, int k, std::vector<int>& id);
+
+            /**
+             * \brief Finds the query in _data vector and returns its index in the 
+             * tree 
              * */
             inline int find(int query) const;
 
             /**
-             * Brute force algorithm to check wheater a query belongs to the
+             * \brief Brute force algorithm to check wheater a query belongs to the
              * tree or not 
              * */
             inline bool belongs(int query) const;
 
             /**
-             * Get the tree
+             * \brief Get the tree
              * */
-            inline const std::vector<vp_node>& t() const {return _tree;}
+            inline const std::vector<tree::vp_node>& t() const {return _tree;}
 
         protected:
             /**
-             * Evaluates the distance between p and the set index_set setting each
+             * \brief Evaluates the distance between p and the set index_set setting each
              * float in index_set
              * */
             inline void dist2(int p, std::vector<ifloat>& index_set) const;
 
             /**
-             * Select among elements in index_set the vantage point to split the Tree
+             * \brief Select among elements in index_set the vantage point to split the Tree
              * */
             inline int select_vp(const std::vector<ifloat>& index_set) const;
 
             /**
-             * Splits the index_set in two sub sets such that lc and rc are
+             * \brief Splits the index_set in two sub sets such that lc and rc are
              * aproximately the same size
-             * @returns: The distance used for splitting the two subsets
+             * \return The distance used for splitting the two subsets
              * */
             inline float split(std::vector<ifloat>& index_set, 
                     std::vector<ifloat>& lc, std::vector<ifloat>& rc) const;
 
             /**
-             * Constructs populating the _tree vector a vp_tree corresponding
+             * \brief Constructs populating the _tree vector a vp_tree corresponding
              * to the data stored in the _data vector and specified in the index_set
              * */
             inline int make_vp_tree(std::vector<ifloat>& index_set);
 
+            /*! \brief prints the whole tree */
             void print_tree()
             {
                 for(int i=0; i < _tree.size(); i++)
@@ -90,6 +131,7 @@ namespace cpu
                 std::cout << std::endl;
             }
 
+            /*! \brief prints a range of the tree */
             void print_range(int b, int e)
             {
                 e = std::min(e, (int)_tree.size());
@@ -98,6 +140,7 @@ namespace cpu
                 std::cout << std::endl;
             }
 
+            /*! checks the tree for errors */
             void check_tree()
             {
                 for(int i=0; i < _tree.size(); i++)
@@ -105,68 +148,177 @@ namespace cpu
                         FATAL_ERROR("Problem in tree :(");
             }
 
-            /* Vector containing the vp-tree representation of all the data stored
+            /*! \brief Tree structure is stored here 
+             *
+             * Vector containing the vp-tree representation of all the data stored
              * in _data vector of super class */
-            std::vector<vp_node> _tree; // Tree structure is stored here :)
+            std::vector<tree::vp_node> _tree; 
 
-            /* Pointer to the metric function. The metric function should return
+            /*! \brief Pointer to the metric function. 
+             *
+             * The metric function should return
              * the squared distance between two elements in the data */
-            float (*_metric)(int, int, const std::vector<float>&, int);
+            metric::cpu::metric_f _metric;
     };
-}
+};
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline cpu::vp_tree::vp_tree(const std::vector<float>& data, int dim,
-        float (*metric)(int, int, const std::vector<float>&, int)) :
-    tree(data, dim),
+inline tree::cpu::vp_tree::vp_tree(std::shared_ptr<const std::vector<float>> data, 
+        int dim, metric::cpu::metric_f metric) :
+    tree::vp_tree(data, dim),
     _metric(metric)
 {
     std::vector<ifloat> index_set;
 
     // Populates index set with data
-    for(int i=0; i < data.size(); i+=dim) 
-    {
+    for(int i=0; i < _data->size(); i+=dim) 
         index_set.push_back(ifloat(i, 0.0f));
-    }
 
     // Creates the tree 
-    TIME_BETWEEN(
     make_vp_tree(index_set);
-    );
-
-    //print_tree();
-    check_tree();
-
-    TIME_BETWEEN(
-    int f;
-    for(int i=0; i < data.size(); i+=dim)
-    {
-        //std::cout << i/dim << std::endl;
-        f = find(i);
-        //std::cout << "find(" << i << "): " << f << " -> ";
-        //std::cout << "tree[" << f << "]: " << _tree[f] << std::endl;
-    }
-    );
-
-    /*int i=6803*66;
-    
-    std::cout << belongs(i) << std::endl;
-
-    print_range(90560, 90586);
-
-    int f = find(i);
-    std::cout << "find(" << i << "): " << f << " -> ";
-    std::cout << "tree[" << f << "]: " << _tree[f] << std::endl;
-    */
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline int cpu::vp_tree::find(int query) const
+inline void tree::cpu::vp_tree::knn(int query, float delta, std::vector<int>& id)
+{
+    std::stack<int> stack; // recursion stack
+    int cmp = 0; // root 
+    //int cmp = _tree.size() - 1; // root
+    float dist;
+
+    ASSERT_FATAL_ERROR(query < _data->size(), "Data doesn't contains the query");
+
+    id.clear();
+    stack.push(cmp);
+    while(!stack.empty())
+    {
+        cmp = stack.top(); stack.pop();
+
+        dist = _metric(query, _tree[cmp]._key, *_data, _dim);
+
+        if(_tree[cmp]._lc == LEAF && _tree[cmp]._rc == LEAF) {// if leaf
+            if(dist < delta)
+                id.push_back(_tree[cmp]._key);
+        }
+        else // if node is not leaf 
+        {
+            if (dist <= _tree[cmp]._d + delta)
+                stack.push(_tree[cmp]._lc);
+            if (dist >= _tree[cmp]._d - delta)
+                stack.push(_tree[cmp]._rc);
+        } 
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+inline void tree::cpu::vp_tree::knn(int query, int k, std::vector<int>& id)
+{
+    std::vector<ifloat> heap;
+    std::map<int, int> in_heap;
+    std::stack<int> stack;
+    float max_dist, dist;
+    int cmp = 0;
+
+    ASSERT_FATAL_ERROR(query < _data->size(), "Data doesn't contains the query");
+
+    for(int i=0; i < k; i++) {// Sets the heap with initial guesses
+        heap.push_back(ifloat(i*_dim, _metric(query, i*_dim, *_data, _dim)));
+        in_heap[i*_dim] = i*_dim;
+    }
+
+    std::make_heap(heap.begin(), heap.end());
+    max_dist = heap.front().val();
+    stack.push(cmp);
+    while(!stack.empty())
+    {
+        cmp = stack.top(); stack.pop();
+
+        dist = _metric(query, _tree[cmp]._key, *_data, _dim);
+ 
+        if(_tree[cmp]._lc == LEAF && _tree[cmp]._rc == LEAF) {// if leaf
+            if(dist < max_dist && !in_heap.count(_tree[cmp]._key)) {
+                in_heap.erase(heap.front().key());
+                std::pop_heap(heap.begin(), heap.end()); heap.pop_back();
+                heap.push_back(ifloat(_tree[cmp]._key, dist));
+                in_heap[_tree[cmp]._key] = _tree[cmp]._key;
+                std::push_heap(heap.begin(), heap.end());
+                max_dist = heap.front().val();
+            }
+        }
+        else // if node is not leaf 
+        {
+            if (dist <= _tree[cmp]._d + max_dist)
+                stack.push(_tree[cmp]._lc);
+            if (dist >= _tree[cmp]._d - max_dist)
+                stack.push(_tree[cmp]._rc);
+        } 
+    }
+
+    id.clear();
+    for(int i=0; i < heap.size(); i++)
+        id.push_back(heap[i].key());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+inline void tree::cpu::vp_tree::brute_knn(int query, float delta, std::vector<int>& id)
+{
+    float dist;
+ 
+    ASSERT_FATAL_ERROR(query < _data->size(), "Data doesn't contains the query");
+
+    id.clear();
+    for(int i=0; i < _data->size(); i+=_dim) {
+        dist = _metric(query, i, *_data, _dim);
+
+        if(dist < delta) 
+            id.push_back(i);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+inline void tree::cpu::vp_tree::brute_knn(int query, int k, std::vector<int>& id)
+{
+    float dist, max_dist;
+    std::vector<ifloat> heap;
+
+    ASSERT_FATAL_ERROR(query < _data->size(), "Data doesn't contains the query");
+
+    for(int i=0; i < k; i++)
+        heap.push_back(ifloat(i*_dim, _metric(query, i*_dim, *_data, _dim)));
+
+    id.clear();
+    std::make_heap(heap.begin(), heap.end());
+    max_dist = heap.front().val();
+
+    for(int i=k*_dim; i < _data->size(); i+=_dim) {
+        dist = _metric(query, i, *_data, _dim);
+
+        if(dist < max_dist) {
+            std::pop_heap(heap.begin(), heap.end()); heap.pop_back();
+            heap.push_back(ifloat(i, dist));
+            std::push_heap(heap.begin(), heap.end());
+            max_dist = heap.front().val();
+        }
+    }
+
+    for(int i=0; i < heap.size(); i++)
+        id.push_back(heap[i].key());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+inline int tree::cpu::vp_tree::find(int query) const
 {
     //int cmp = _tree.size() - 1;
     int cmp = 0;
+
+    ASSERT_FATAL_ERROR(query < _data->size(), "Data doesn't contains the query");
 
     while(_tree[cmp]._key != query || _tree[cmp]._lc != LEAF || _tree[cmp]._rc != LEAF)
     {
@@ -175,8 +327,7 @@ inline int cpu::vp_tree::find(int query) const
             FATAL_ERROR("Query not found ! :`(");
         }
 
-        //std::cout << "[" << cmp << "]: " << _tree[cmp] << " -> " << dist2(_tree[cmp]._key, query) << std::endl;
-        if(_metric(_tree[cmp]._key, query, _data, _dim) < _tree[cmp]._d)
+        if(_metric(_tree[cmp]._key, query, *_data, _dim) < _tree[cmp]._d)
             cmp = _tree[cmp]._lc;
         else
             cmp = _tree[cmp]._rc;
@@ -187,8 +338,10 @@ inline int cpu::vp_tree::find(int query) const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline bool cpu::vp_tree::belongs(int query) const
+inline bool tree::cpu::vp_tree::belongs(int query) const
 {
+    ASSERT_FATAL_ERROR(query < _data->size(), "Data doesn't contains the query");
+
     for(int i=0; i < _tree.size(); i++)
     {
         if(_tree[i]._key == query && _tree[i]._lc == -1 && _tree[i]._rc == -1) {
@@ -204,14 +357,14 @@ inline bool cpu::vp_tree::belongs(int query) const
 /**
  * Basic implementation still. Don't see the point for a more complicated code 
  * */
-inline int cpu::vp_tree::select_vp(const std::vector<ifloat>& index_set) const
+inline int tree::cpu::vp_tree::select_vp(const std::vector<ifloat>& index_set) const
 {
     return index_set.front().key();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline float cpu::vp_tree::split(std::vector<ifloat>& index_set, 
+inline float tree::cpu::vp_tree::split(std::vector<ifloat>& index_set, 
         std::vector<ifloat>& l_set, std::vector<ifloat>& r_set) const
 {
     int middle = index_set.size() / 2;
@@ -226,6 +379,7 @@ inline float cpu::vp_tree::split(std::vector<ifloat>& index_set,
         }
     }
 
+    l_set.clear(); r_set.clear();
     l_set.assign(index_set.begin(), index_set.begin()+middle);
     r_set.assign(index_set.begin()+middle, index_set.end());
 
@@ -256,7 +410,7 @@ inline float cpu::vp_tree::split(std::vector<ifloat>& index_set,
     return _tree.size()-1;
 }*/
 
-inline int cpu::vp_tree::make_vp_tree(std::vector<ifloat>& index_set)
+inline int tree::cpu::vp_tree::make_vp_tree(std::vector<ifloat>& index_set)
 {
     std::vector<ifloat> l_set, r_set;
     std::stack<std::pair<std::vector<ifloat>, int>> stack;
@@ -267,7 +421,7 @@ inline int cpu::vp_tree::make_vp_tree(std::vector<ifloat>& index_set)
     p = this->select_vp(set_aux);
 
     if(set_aux.size() <= 1)
-        _tree.push_back(vp_node(p, 0, LEAF, LEAF));
+        _tree.push_back(tree::vp_node(p, 0, LEAF, LEAF));
     else {
         this->dist2(p, set_aux);
         mu = this->split(set_aux, l_set, r_set);
@@ -275,7 +429,7 @@ inline int cpu::vp_tree::make_vp_tree(std::vector<ifloat>& index_set)
         stack.push(std::pair<std::vector<ifloat>, int>(l_set, _tree.size()));
         stack.push(std::pair<std::vector<ifloat>, int>(r_set, _tree.size()));
 
-        _tree.push_back(vp_node(p, mu, UNDEF, UNDEF));
+        _tree.push_back(tree::vp_node(p, mu, UNDEF, UNDEF));
     }
 
     while(!stack.empty())
@@ -287,7 +441,7 @@ inline int cpu::vp_tree::make_vp_tree(std::vector<ifloat>& index_set)
         p = this->select_vp(set_aux);
 
         if(set_aux.size() == 1)
-            _tree.push_back(vp_node(p, 0, LEAF, LEAF));
+            _tree.push_back(tree::vp_node(p, 0, LEAF, LEAF));
         else {
             this->dist2(p, set_aux);
             mu = this->split(set_aux, l_set, r_set);
@@ -295,7 +449,7 @@ inline int cpu::vp_tree::make_vp_tree(std::vector<ifloat>& index_set)
             stack.push(std::pair<std::vector<ifloat>, int>(l_set, _tree.size()));
             stack.push(std::pair<std::vector<ifloat>, int>(r_set, _tree.size()));
         
-            _tree.push_back(vp_node(p, mu, UNDEF, UNDEF));
+            _tree.push_back(tree::vp_node(p, mu, UNDEF, UNDEF));
         }
  
         if(_tree[parent]._rc == UNDEF)
@@ -309,12 +463,10 @@ inline int cpu::vp_tree::make_vp_tree(std::vector<ifloat>& index_set)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void cpu::vp_tree::dist2(int p, std::vector<ifloat>& index_set) const
+inline void tree::cpu::vp_tree::dist2(int p, std::vector<ifloat>& index_set) const
 {
     for(int i=0; i < index_set.size(); i++)
-    {
-        index_set[i].val() = _metric(p, index_set[i].key(), _data, _dim);
-    }
+        index_set[i].val() = _metric(p, index_set[i].key(), *_data, _dim);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

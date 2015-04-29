@@ -34,4 +34,7 @@ debug
 release
 
 # Helper Shell scripts one might need
-*.sh
+*.sh 
+
+# doc
+doc

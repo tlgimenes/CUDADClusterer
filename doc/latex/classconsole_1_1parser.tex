@@ -1,0 +1,79 @@
+\hypertarget{classconsole_1_1parser}{}\section{console\+:\+:parser Class Reference}
+\label{classconsole_1_1parser}\index{console\+::parser@{console\+::parser}}
+
+
+Class for parsing the Command Line Interface.  
+
+
+
+
+{\ttfamily \#include $<$parser.\+hpp$>$}
+
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classconsole_1_1parser_ae579d789c0cc9b9b15bb7368ec54d703}{}static void \hyperlink{classconsole_1_1parser_ae579d789c0cc9b9b15bb7368ec54d703}{parse} (int argc, const char $\ast$$\ast$argv)\label{classconsole_1_1parser_ae579d789c0cc9b9b15bb7368ec54d703}
+
+\begin{DoxyCompactList}\small\item\em Parses the command line interface. \end{DoxyCompactList}\item 
+static void \hyperlink{classconsole_1_1parser_ab698f0297fcbdf6d52d32ad181c80f99}{add\+\_\+argument} (const std\+::string \&short\+\_\+form, const std\+::string \&help)
+\begin{DoxyCompactList}\small\item\em Adds arguments to be parsed. \end{DoxyCompactList}\item 
+static const std\+::string \hyperlink{classconsole_1_1parser_ac071bd86195d96a31cab5dad9c34aecd}{get} (const std\+::string \&arg, bool required)
+\begin{DoxyCompactList}\small\item\em Gets the value of the argument. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classconsole_1_1parser_a76801efa759b112e67960cbfd7fa9122}{}static void \hyperlink{classconsole_1_1parser_a76801efa759b112e67960cbfd7fa9122}{print\+\_\+help} ()\label{classconsole_1_1parser_a76801efa759b112e67960cbfd7fa9122}
+
+\begin{DoxyCompactList}\small\item\em Prints the help in C\+L\+I. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class for parsing the Command Line Interface. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classconsole_1_1parser_ab698f0297fcbdf6d52d32ad181c80f99}{}\index{console\+::parser@{console\+::parser}!add\+\_\+argument@{add\+\_\+argument}}
+\index{add\+\_\+argument@{add\+\_\+argument}!console\+::parser@{console\+::parser}}
+\subsubsection[{add\+\_\+argument}]{\setlength{\rightskip}{0pt plus 5cm}void console\+::parser\+::add\+\_\+argument (
+\begin{DoxyParamCaption}
+\item[{const std\+::string \&}]{short\+\_\+form, }
+\item[{const std\+::string \&}]{help}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\label{classconsole_1_1parser_ab698f0297fcbdf6d52d32ad181c80f99}
+
+
+Adds arguments to be parsed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em short\+\_\+form} & short form of the parameter. Ex\+: \char`\"{}-\/t\char`\"{}, \char`\"{}-\/a\char`\"{}, etc \\
+\hline
+{\em help} & help for the parameter \\
+\hline
+\end{DoxyParams}
+\hypertarget{classconsole_1_1parser_ac071bd86195d96a31cab5dad9c34aecd}{}\index{console\+::parser@{console\+::parser}!get@{get}}
+\index{get@{get}!console\+::parser@{console\+::parser}}
+\subsubsection[{get}]{\setlength{\rightskip}{0pt plus 5cm}const std\+::string console\+::parser\+::get (
+\begin{DoxyParamCaption}
+\item[{const std\+::string \&}]{arg, }
+\item[{bool}]{required}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\label{classconsole_1_1parser_ac071bd86195d96a31cab5dad9c34aecd}
+
+
+Gets the value of the argument. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em arg} & short form of the parameter. Ex\+: \char`\"{}-\/t\char`\"{}, \char`\"{}-\/a\char`\"{}, etc \\
+\hline
+{\em required} & true if parameter is required, false otherwise \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string containing the value passed in C\+L\+I. If parameter is not required the D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+T\+R\+I\+N\+G will be returned 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+parser/\hyperlink{parser_8hpp}{parser.\+hpp}\end{DoxyCompactItemize}

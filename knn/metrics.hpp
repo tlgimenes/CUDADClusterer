@@ -1,11 +1,14 @@
-/*
- * ============================================================================
- *       Filename:  metrics.hpp
- *    Description:  
- *        Created:  2015-04-22 22:35
- *         Author:  Tiago Lobato Gimenes        (tlgimenes@gmail.com)
- * ============================================================================
- */
+/*============================================================================*/
+/*! \file metrics.hpp 
+ *  \author Tiago LOBATO GIMENES            (tlgimenes@gmail.com)
+ *  \date 2015-04-22 22:35
+ *
+ *  \brief metric definitions
+ *
+ *  This file contains implementation of metric functions
+ * */
+/*============================================================================*/
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -14,24 +17,31 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
+namespace metric {
 namespace cpu
 {
-    /**
-     * Distance function used for the metric space. You should
-     * rewrite this function for each metric. This function implements the 
-     * euclidean distance
-     * @param0: index of an element in the data array
-     * @param1: index of an element in the data array
-     * @param2: data
-     * @param3: dimention of the data
-     * @returns: distance between element of index a and b
+    /*!
+     * \brief Definition of the distance function used for defining the metric space.
+     *
+     * You should write functions based on this declaration
+     * \param id1 index of an element in the data array
+     * \param id2 index of an element in the data array
+     * \param data data array
+     * \param dim dimention of the data
+     * \return distance between element of index a and b
      * */
-    inline float euclidean2(int a, int b, const std::vector<float>& data, int dim);
-}
+    using metric_f = float (*)(int, int, const std::vector<float>&, int);
+
+    /*!
+     * \brief Implementation of the euclidean metric 
+     * */
+    inline float euclidean(int a, int b, const std::vector<float>& data, int dim);
+};
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline float cpu::euclidean2(int a, int b, const std::vector<float>& data, int dim)
+inline float metric::cpu::euclidean(int a, int b, const std::vector<float>& data, int dim)
 {
     float res = 0.0f;
 
@@ -42,7 +52,7 @@ inline float cpu::euclidean2(int a, int b, const std::vector<float>& data, int d
         res += (data[a+i] - data[b+i]) * (data[a+i] - data[b+i]);
     }
 
-    return res;
+    return sqrt(res);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

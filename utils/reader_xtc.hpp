@@ -1,11 +1,14 @@
-/*
- * ============================================================================
- *       Filename:  reader_xtc.hpp
- *    Description:  
- *        Created:  2015-03-30 18:49
- *         Author:  Tiago Lobato Gimenes        (tlgimenes@gmail.com)
- * ============================================================================
- */
+/*============================================================================*/
+/*! \file reader_xtc.hpp 
+ *  \author Tiago LOBATO GIMENES            (tlgimenes@gmail.com)
+ *  \date 2015-03-30 18:49 
+ *
+ *  \brief .xtc file reader 
+ *
+ *  This file contains the implementation of a class for reading .xtc files 
+ *  with a trajectory list
+ * */
+/*============================================================================*/
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -27,6 +30,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/*! \brief Maximun file name lenght */
 #define MAX_FILE_NAME_LENGTH 128
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,12 +39,13 @@ namespace bfs = boost::filesystem;
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/*! \brief Class for reading trajlist and .xtc files */
 class reader_xtc
 {
     public:
-        /**
-         * Reads all trajectories specified in the trajlist file. A trajlist
-         * file can contains the relative paths to the .xtc files or name of
+        /*! \brief Reads all trajectories specified in the trajlist file. 
+         *
+         * A trajlist file can contains the relative paths to the .xtc files or name of
          * files that contains relative paths to the .xtc files. The absolute
          * path is always done in the following way : path = home/trajlist
          * */
@@ -48,15 +53,16 @@ class reader_xtc
                 std::vector<float>& data, int& n_atoms);
 
     protected:
-        /**
-         * Reads a trajectory file. It can be *.xtc or any other file defined
-         * in _supported_ext vector and appends the new trajectories in the
-         * data vector
+        /*! \brief Reads a trajectory file. 
+         *
+         * It can be *.xtc or any other file defined in _supported_ext vector 
+         * and appends the new trajectories in the data vector
          * */
         static inline void read_trajfile(const std::string& trajfile, std::vector<float>&
                 data, int& n_atoms, int& n_samples);
 
-        /**
+        /*! \brief finds *.xtc files from trajlist
+         *
          * Given a trajlist path, this function will recursively try to find
          * the (*.xtc) files and insert it on the framefile_list. The complete
          * path for the file must be given by home/trajlist 
@@ -64,14 +70,15 @@ class reader_xtc
         static inline void get_framefile_list(std::vector<std::string>& framefile_list,
                 const std::string& home, const std::string& trajlist);
 
-        /**
-         * Checks if the extension of file "file_name" is supported or not
+        /*! \brief Checks if the extension of file "file_name" is supported or not
          * by this class
+         *
+         * \return true if file extension is supported, false otherwise
          * */
         static inline bool is_ext_supported(const std::string& file_name);
 
     private:
-        static std::vector<std::string> _supported_ext;
+        static std::vector<std::string> _supported_ext; /*! list of supported extensions */
 };
 
 ///////////////////////////////////////////////////////////////////////////////

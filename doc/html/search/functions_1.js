@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['dist2',['dist2',['../classVPTreeCPU.html#ab0a19f258e0ee042e7a244a2e2a06eb0',1,'VPTreeCPU::dist2(int a, int b)'],['../classVPTreeCPU.html#a6ea3cda7de7a4d12ec453d22e6873a12',1,'VPTreeCPU::dist2(int p, std::vector&lt; ifloat &gt; &amp;index_set)']]]
+  ['belongs',['belongs',['../classtree_1_1cpu_1_1vp__tree.html#a30b6f89d268aae73aeb8a3125eeb631d',1,'tree::cpu::vp_tree']]],
+  ['brute_5fknn',['brute_knn',['../classtree_1_1cpu_1_1vp__tree.html#a6b4257008f872348b15ec221b6e74348',1,'tree::cpu::vp_tree::brute_knn(int query, float delta, std::vector&lt; int &gt; &amp;id)'],['../classtree_1_1cpu_1_1vp__tree.html#a417aef52e44c4b1f8b5d778e8e251be3',1,'tree::cpu::vp_tree::brute_knn(int query, int k, std::vector&lt; int &gt; &amp;id)']]]
 ];

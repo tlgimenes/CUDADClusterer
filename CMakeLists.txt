@@ -5,7 +5,7 @@
 #:Date: 2015-03-30 14:54
 
 set(PROJECT_NAME gpu_clusterer)
-set(SUB_DIRS parser utils xdrfile knn)
+set(SUB_DIRS parser utils xdrfile knn clusterer)
 set(SUB_DIRS_LIBS ${SUB_DIRS})
 set(CFLAGS -std=c++11)
 set(ADD_LIBS -lboost_system -lboost_filesystem)
@@ -20,6 +20,7 @@ add_definitions(${CFLAGS})
 project(${PROJECT_NAME})
 
 # Adds subdirectories to the project
+add_subdirectory(clusterer)
 add_subdirectory(xdrfile)
 add_subdirectory(parser)
 add_subdirectory(utils)

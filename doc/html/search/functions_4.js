@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['is_5fext_5fsupported',['is_ext_supported',['../classReaderXTC.html#a864850b4467d829587821d2304ef5809',1,'ReaderXTC']]]
+  ['eps',['eps',['../classcluster_1_1dbscan.html#adffe3dee8aede13ce2068552a38e4bb9',1,'cluster::dbscan::eps()'],['../classcluster_1_1dbscan.html#a16f0b7f5ffa65a6638df01554559ba29',1,'cluster::dbscan::eps() const ']]]
 ];

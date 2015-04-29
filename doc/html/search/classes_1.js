@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['dbscan',['DBSCAN',['../classDBSCAN.html',1,'']]]
+  ['dbscan',['dbscan',['../classcluster_1_1cpu_1_1dbscan.html',1,'cluster::cpu']]],
+  ['dbscan',['dbscan',['../classcluster_1_1dbscan.html',1,'cluster']]]
 ];

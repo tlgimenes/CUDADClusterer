@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['adjacencygraph',['AdjacencyGraph',['../classAdjacencyGraph.html',1,'']]]
+  ['adjacency_5fgraph',['adjacency_graph',['../classadjacency__graph.html',1,'']]]
 ];

@@ -1,11 +1,13 @@
-/*
- * =====================================================================================
- *       Filename:  error.hpp
- *    Description:  
- *        Created:  2015-02-02 11:13
- *         Author:  Tiago Lobato Gimenes        (tlgimenes@gmail.com)
- * =====================================================================================
- */
+/*============================================================================*/
+/*! \file error.hpp 
+ *  \author Tiago LOBATO GIMENES            (tlgimenes@gmail.com)
+ *  \date 2015-02-02 11:13
+ *
+ *  \brief error repporting interface
+ *
+ *  This file contains the implementation of a simple error repporting interface
+ * */
+/*============================================================================*/
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -18,21 +20,28 @@
 #include <chrono>
 #include <iostream>
 
+#include "color.hpp"
+
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/** 
- * Prints error message and exits  
+/*!
+ * \brief Prints error message and exits  
  * */
 static void __error(const std::string& error_code, const std::string& file, int line);
 
-/**
- * Prints warning message and continues execution
+/*!
+ * \brief Prints warning message and continues execution
  * */
 static void __warning(const std::string& error_code, const std::string& file, int line);
+
+/*!
+ * \brief Prints a message with a given color
+ * */
+static void __message(const std::string& message, const console::modifier& color);
 
 #ifdef __cplusplus
 };
@@ -41,23 +50,43 @@ static void __warning(const std::string& error_code, const std::string& file, in
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef NDEBUG
-#define DBG_MESSAGE(str) // Message displayed in debug only mode
-#define FATAL_ERROR(str)
-#define WARNING_ERROR(str)
-#define ASSERT_FATAL_ERROR(boolean, str)
-#define ASSERT_WARNING_ERROR(boolean, str)
+
+    #define DBG_MESSAGE(str) /*! \brief Message displayed in debug only mode */
+    #define FATAL_ERROR(str)
+    #define WARNING_ERROR(str)
+    #define ASSERT_FATAL_ERROR(boolean, str)
+    #define ASSERT_WARNING_ERROR(boolean, str)
+    #define CUDA_SAFE(code)
+
 #else
-#define DBG_MESSAGE(str) std::cout << str // Message displayed in debug only mode
-#define FATAL_ERROR(str) __error(str, __FILE__, __LINE__)
-#define WARNING_ERROR(str) __warning(str, __FILE__, __LINE__)
-#define ASSERT_FATAL_ERROR(boolean, str) (void)((boolean) || (__error(str, __FILE__, __LINE__),0))
-#define ASSERT_WARNING_ERROR(boolean, str) (void)((boolean) || (__warning(str, __FILE__, __LINE__),0))
+
+    /*! \brief Message to be displayed in debug only mode */
+    #define DBG_MESSAGE(str) __message(str, console::FG_D_GRAY) 
+
+    /*! \brief Fatal errors
+    *
+    * This macro writes the error message in str and exits */
+    #define FATAL_ERROR(str) __error(str, __FILE__, __LINE__)
+
+    /*! \brief Warning
+    *
+    * This macro writes the warning message in str and continues */
+    #define WARNING_ERROR(str) __warning(str, __FILE__, __LINE__)
+
+    /*! \brief Asserts with fatal error message  */
+    #define ASSERT_FATAL_ERROR(boolean, str) (void)((boolean) || (__error(str, __FILE__, __LINE__),0))
+
+    /*! \brief Asserts with warning message */
+    #define ASSERT_WARNING_ERROR(boolean, str) (void)((boolean) || (__warning(str, __FILE__, __LINE__),0))
+
+    /*! \brief This macro searches for errors in cuda functions execution 
+    *
+    *  One should use always this macro in each cuda function call */
+    #define CUDA_SAFE(code) \
+        ASSERT_FATAL_ERROR(code == cudaSuccess, cudaGetErrorString(cudaGetLastError()))
+
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Definitions of cuda like functions
-#define CUDA_SAFE(code) \
-    ASSERT_FATAL_ERROR(code == cudaSuccess, cudaGetErrorString(cudaGetLastError()))
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -66,10 +95,15 @@ static void __error(const std::string& error_code, const std::string& file, int 
     auto now = std::chrono::system_clock::now();
     std::time_t now_c = std::chrono::system_clock::to_time_t(now);
     struct tm *tm = std::localtime(&now_c);
+    console::modifier red(console::FG_RED);
+    console::modifier def(console::FG_DEFAULT);
+    console::modifier blue(console::FG_BLUE);
+    console::modifier gray(console::FG_D_GRAY);
 
-    std::cout << "FATAL ERROR ! " << file << ":" << line; 
-    std::cout << " ["<< tm->tm_mday << "/" << (tm->tm_mon+1) << "/" << (tm->tm_year+1900);
-    std::cout << "]:" << tm->tm_hour << ":" << tm->tm_min << ":" << tm->tm_sec << std::endl;
+    std::cout << red << "FATAL ERROR ! " << gray << file;
+    std::cout << ":" << line; 
+    std::cout << blue << " ["<< tm->tm_mday << "/" << (tm->tm_mon+1) << "/" << (tm->tm_year+1900);
+    std::cout << "]:" << tm->tm_hour << ":" << tm->tm_min << ":" << tm->tm_sec << def << std::endl;
     std::cout << "'" << error_code << "'" << std::endl << std::endl;
 
     exit(EXIT_FAILURE);
@@ -84,13 +118,27 @@ static void __warning(const std::string& error_code, const std::string& file, in
     auto now = std::chrono::system_clock::now();
     std::time_t now_c = std::chrono::system_clock::to_time_t(now);
     struct tm *tm = std::localtime(&now_c);
+    console::modifier yellow(console::FG_YELLOW);
+    console::modifier fg_def(console::FG_DEFAULT);
+    console::modifier blue(console::FG_BLUE);
+    console::modifier gray(console::FG_D_GRAY);
 
-    std::cout << "WARNING ! " << file << ":" << line; 
-    std::cout << " ["<< tm->tm_mday << "/" << (tm->tm_mon+1) << "/" << (tm->tm_year+1900);
-    std::cout << "]:" << tm->tm_hour << ":" << tm->tm_min << ":" << tm->tm_sec << std::endl;
+    std::cout << yellow << "WARNING ! " << gray << file;
+    std::cout << ":" << line; 
+    std::cout << blue << " ["<< tm->tm_mday << "/" << (tm->tm_mon+1) << "/" << (tm->tm_year+1900);
+    std::cout << "]:" << tm->tm_hour << ":" << tm->tm_min << ":" << tm->tm_sec << fg_def << std::endl;
     std::cout << "'" << error_code << "'" << std::endl << std::endl;
     
     return;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+static void __message(const std::string& message, const console::modifier& color)
+{
+    console::modifier def(console::FG_DEFAULT);
+
+    std::cout << color << message << def;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

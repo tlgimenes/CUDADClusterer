@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['eps',['eps',['../classDBSCAN.html#a3b455b232e38ffebc80e81782b78abbf',1,'DBSCAN::eps()'],['../classDBSCAN.html#a38e394f6c2be17c39a21f403d17932f9',1,'DBSCAN::eps() const ']]]
+  ['check_5ftree',['check_tree',['../classtree_1_1cpu_1_1vp__tree.html#addb1a27773443a133c15c75309de3ee8',1,'tree::cpu::vp_tree']]],
+  ['code',['code',['../classconsole_1_1modifier.html#ad525a786ab7b18058ca2b3e120a7ba0a',1,'console::modifier']]]
 ];

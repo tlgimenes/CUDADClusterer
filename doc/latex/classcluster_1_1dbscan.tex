@@ -1,0 +1,96 @@
+\hypertarget{classcluster_1_1dbscan}{}\section{cluster\+:\+:dbscan Class Reference}
+\label{classcluster_1_1dbscan}\index{cluster\+::dbscan@{cluster\+::dbscan}}
+
+
+Base class for applying D\+B\+S\+C\+A\+N clustering algorithm to data.  
+
+
+
+
+{\ttfamily \#include $<$dbscan.\+hpp$>$}
+
+Inheritance diagram for cluster\+:\+:dbscan\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcluster_1_1dbscan}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcluster_1_1dbscan_af77dacb349da6976a3521297a6b50d0d}{dbscan} (std\+::shared\+\_\+ptr$<$ const std\+::vector$<$ float $>$$>$ data, const float \hyperlink{classcluster_1_1dbscan_adffe3dee8aede13ce2068552a38e4bb9}{eps}, const int \hyperlink{classcluster_1_1dbscan_a5f424fb02ca1d736fb07f9e214a01a65}{min\+\_\+pts}, const int dim)
+\begin{DoxyCompactList}\small\item\em Constructor of the clusterer. \end{DoxyCompactList}\item 
+\hypertarget{classcluster_1_1dbscan_adffe3dee8aede13ce2068552a38e4bb9}{}float \& \hyperlink{classcluster_1_1dbscan_adffe3dee8aede13ce2068552a38e4bb9}{eps} ()\label{classcluster_1_1dbscan_adffe3dee8aede13ce2068552a38e4bb9}
+
+\begin{DoxyCompactList}\small\item\em Set epsilon value for the D\+B\+S\+C\+A\+N algorithm. \end{DoxyCompactList}\item 
+\hypertarget{classcluster_1_1dbscan_a5f424fb02ca1d736fb07f9e214a01a65}{}int \& \hyperlink{classcluster_1_1dbscan_a5f424fb02ca1d736fb07f9e214a01a65}{min\+\_\+pts} ()\label{classcluster_1_1dbscan_a5f424fb02ca1d736fb07f9e214a01a65}
+
+\begin{DoxyCompactList}\small\item\em Set minimun points for the D\+B\+S\+C\+A\+N algorithm. \end{DoxyCompactList}\item 
+\hypertarget{classcluster_1_1dbscan_a16f0b7f5ffa65a6638df01554559ba29}{}const float \& \hyperlink{classcluster_1_1dbscan_a16f0b7f5ffa65a6638df01554559ba29}{eps} () const \label{classcluster_1_1dbscan_a16f0b7f5ffa65a6638df01554559ba29}
+
+\begin{DoxyCompactList}\small\item\em Get epsilon value of the D\+B\+S\+C\+A\+N algorithm. \end{DoxyCompactList}\item 
+\hypertarget{classcluster_1_1dbscan_a099428308e3dd233ad0098bf85fdbb7b}{}const int \& \hyperlink{classcluster_1_1dbscan_a099428308e3dd233ad0098bf85fdbb7b}{min\+\_\+pts} () const \label{classcluster_1_1dbscan_a099428308e3dd233ad0098bf85fdbb7b}
+
+\begin{DoxyCompactList}\small\item\em Get minimun points of the D\+B\+S\+C\+A\+N algorithm. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \hyperlink{classcluster_1_1dbscan_a623eaf58c70c4b8af054d421addb33af}{\+\_\+eps}
+\item 
+int \hyperlink{classcluster_1_1dbscan_aaf6a0241678a63592356ab8e150ee511}{\+\_\+min\+\_\+pts}
+\item 
+int \hyperlink{classcluster_1_1dbscan_af11131046370eccd7ff4538f328106bb}{\+\_\+dim}
+\item 
+std\+::shared\+\_\+ptr$<$ const std\+::vector$<$ float $>$ $>$ \hyperlink{classcluster_1_1dbscan_a606f2ffd2a43d393f3d8c8a41d4280a7}{\+\_\+data}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Base class for applying D\+B\+S\+C\+A\+N clustering algorithm to data. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classcluster_1_1dbscan_af77dacb349da6976a3521297a6b50d0d}{}\index{cluster\+::dbscan@{cluster\+::dbscan}!dbscan@{dbscan}}
+\index{dbscan@{dbscan}!cluster\+::dbscan@{cluster\+::dbscan}}
+\subsubsection[{dbscan}]{\setlength{\rightskip}{0pt plus 5cm}cluster\+::dbscan\+::dbscan (
+\begin{DoxyParamCaption}
+\item[{std\+::shared\+\_\+ptr$<$ const std\+::vector$<$ float $>$$>$}]{data, }
+\item[{const float}]{eps, }
+\item[{const int}]{min\+\_\+pts, }
+\item[{const int}]{dim}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classcluster_1_1dbscan_af77dacb349da6976a3521297a6b50d0d}
+
+
+Constructor of the clusterer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Data array \\
+\hline
+{\em eps} & Epsilon distance parameter of the D\+B\+S\+C\+A\+N algorithm \\
+\hline
+{\em min\+\_\+pts} & Minimal number of points for the D\+B\+S\+C\+A\+N algorithm \\
+\hline
+{\em dim} & Dimention of the data \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classcluster_1_1dbscan_a606f2ffd2a43d393f3d8c8a41d4280a7}{}\index{cluster\+::dbscan@{cluster\+::dbscan}!\+\_\+data@{\+\_\+data}}
+\index{\+\_\+data@{\+\_\+data}!cluster\+::dbscan@{cluster\+::dbscan}}
+\subsubsection[{\+\_\+data}]{\setlength{\rightskip}{0pt plus 5cm}std\+::shared\+\_\+ptr$<$const std\+::vector$<$float$>$ $>$ cluster\+::dbscan\+::\+\_\+data\hspace{0.3cm}{\ttfamily [protected]}}\label{classcluster_1_1dbscan_a606f2ffd2a43d393f3d8c8a41d4280a7}
+Vector containing data \hypertarget{classcluster_1_1dbscan_af11131046370eccd7ff4538f328106bb}{}\index{cluster\+::dbscan@{cluster\+::dbscan}!\+\_\+dim@{\+\_\+dim}}
+\index{\+\_\+dim@{\+\_\+dim}!cluster\+::dbscan@{cluster\+::dbscan}}
+\subsubsection[{\+\_\+dim}]{\setlength{\rightskip}{0pt plus 5cm}int cluster\+::dbscan\+::\+\_\+dim\hspace{0.3cm}{\ttfamily [protected]}}\label{classcluster_1_1dbscan_af11131046370eccd7ff4538f328106bb}
+Data\textquotesingle{}s dimention \hypertarget{classcluster_1_1dbscan_a623eaf58c70c4b8af054d421addb33af}{}\index{cluster\+::dbscan@{cluster\+::dbscan}!\+\_\+eps@{\+\_\+eps}}
+\index{\+\_\+eps@{\+\_\+eps}!cluster\+::dbscan@{cluster\+::dbscan}}
+\subsubsection[{\+\_\+eps}]{\setlength{\rightskip}{0pt plus 5cm}float cluster\+::dbscan\+::\+\_\+eps\hspace{0.3cm}{\ttfamily [protected]}}\label{classcluster_1_1dbscan_a623eaf58c70c4b8af054d421addb33af}
+Epsilon parameters \hypertarget{classcluster_1_1dbscan_aaf6a0241678a63592356ab8e150ee511}{}\index{cluster\+::dbscan@{cluster\+::dbscan}!\+\_\+min\+\_\+pts@{\+\_\+min\+\_\+pts}}
+\index{\+\_\+min\+\_\+pts@{\+\_\+min\+\_\+pts}!cluster\+::dbscan@{cluster\+::dbscan}}
+\subsubsection[{\+\_\+min\+\_\+pts}]{\setlength{\rightskip}{0pt plus 5cm}int cluster\+::dbscan\+::\+\_\+min\+\_\+pts\hspace{0.3cm}{\ttfamily [protected]}}\label{classcluster_1_1dbscan_aaf6a0241678a63592356ab8e150ee511}
+Minimal number of points Parameters 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+clusterer/\hyperlink{dbscan_8hpp}{dbscan.\+hpp}\end{DoxyCompactItemize}
