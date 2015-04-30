@@ -34,14 +34,17 @@ namespace tree
          * \param d distance threshold if it's an internal node
          * \param lc index in tree vector of left child
          * \param rc index in tree vector or right child
+         * \param par index in tree vector of the parent node (ROOT if node is
+         * root)
          * */
-        vp_node_t(int k = 0, float d = 0.0f, int lc = 0, int rc = 0) : 
-            _key(k), _d(d), _lc(lc), _rc(rc) {}
+        vp_node_t(int k = 0, float d = 0.0f, int lc = 0, int rc = 0, int par = 0) : 
+            _key(k), _d(d), _lc(lc), _rc(rc), _par(par) {}
 
         int _key; /*!< index in _data */
         float _d; /*!< distance threshold */
         int _lc;  /*!< left child index */
         int _rc;  /*!< right child index */
+        int _par; /*!< parent node */
     };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -147,7 +150,8 @@ inline std::shared_ptr<const std::vector<float>>& tree::vp_tree::data()
  * */
 inline std::ostream& operator<< (std::ostream& in, const tree::vp_node& n)
 {
-    in << "(" << n._key << "; " << n._d << "; " << n._lc << "; " << n._rc << ")";
+    in << "(" << n._key << "; " << n._d << "; " << n._lc << "; " << n._rc << 
+        "; " << n._par << ")";
     return in;
 }
 

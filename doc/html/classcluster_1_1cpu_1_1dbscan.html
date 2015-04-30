@@ -113,13 +113,45 @@ Inheritance diagram for cluster::cpu::dbscan:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a48d1156c8eb000f2ae8a916b31b2d492"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1cpu_1_1dbscan.html#a48d1156c8eb000f2ae8a916b31b2d492">dbscan</a> (std::shared_ptr&lt; const std::vector&lt; float &gt;&gt; data, const float <a class="el" href="classcluster_1_1dbscan.html#adffe3dee8aede13ce2068552a38e4bb9">eps</a>, const int <a class="el" href="classcluster_1_1dbscan.html#a5f424fb02ca1d736fb07f9e214a01a65">min_pts</a>, const int dim, metric::cpu::metric_f metric=metric::cpu::euclidean)</td></tr>
+<tr class="memitem:ae865bc18bb646e845cfac1cddad77419"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae865bc18bb646e845cfac1cddad77419"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1cpu_1_1dbscan.html#ae865bc18bb646e845cfac1cddad77419">dbscan</a> ()</td></tr>
+<tr class="memdesc:ae865bc18bb646e845cfac1cddad77419"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs new empty dbscan clusterer. <br /></td></tr>
+<tr class="separator:ae865bc18bb646e845cfac1cddad77419"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48d1156c8eb000f2ae8a916b31b2d492"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1cpu_1_1dbscan.html#a48d1156c8eb000f2ae8a916b31b2d492">dbscan</a> (std::shared_ptr&lt; const std::vector&lt; float &gt;&gt; data, const float <a class="el" href="classcluster_1_1dbscan.html#adffe3dee8aede13ce2068552a38e4bb9">eps</a>, const int <a class="el" href="classcluster_1_1dbscan.html#a5f424fb02ca1d736fb07f9e214a01a65">min_pts</a>, const int dim, metric::cpu::metric_f <a class="el" href="classcluster_1_1cpu_1_1dbscan.html#a6f78ac58ddffb6784a44669355e6e2a1">metric</a>=metric::cpu::euclidean)</td></tr>
 <tr class="memdesc:a48d1156c8eb000f2ae8a916b31b2d492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of the clusterer.  <a href="#a48d1156c8eb000f2ae8a916b31b2d492">More...</a><br /></td></tr>
 <tr class="separator:a48d1156c8eb000f2ae8a916b31b2d492"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a1aa76395f3537fe58221c2f07807be"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a1aa76395f3537fe58221c2f07807be"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1cpu_1_1dbscan.html#a2a1aa76395f3537fe58221c2f07807be">fit</a> (std::shared_ptr&lt; const std::vector&lt; float &gt;&gt; data, int dim)</td></tr>
+<tr class="memdesc:a2a1aa76395f3537fe58221c2f07807be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fits the new data to the dbscan clusterer. <br /></td></tr>
+<tr class="separator:a2a1aa76395f3537fe58221c2f07807be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f78ac58ddffb6784a44669355e6e2a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6f78ac58ddffb6784a44669355e6e2a1"></a>
+const metric::cpu::metric_f &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1cpu_1_1dbscan.html#a6f78ac58ddffb6784a44669355e6e2a1">metric</a> () const </td></tr>
+<tr class="memdesc:a6f78ac58ddffb6784a44669355e6e2a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the metric function used in the tree. <br /></td></tr>
+<tr class="separator:a6f78ac58ddffb6784a44669355e6e2a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ce5c3b6eef289672837ddb84c411cd7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8ce5c3b6eef289672837ddb84c411cd7"></a>
+metric::cpu::metric_f &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1cpu_1_1dbscan.html#a8ce5c3b6eef289672837ddb84c411cd7">metric</a> ()</td></tr>
+<tr class="memdesc:a8ce5c3b6eef289672837ddb84c411cd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the metric function used in the tree. <br /></td></tr>
+<tr class="separator:a8ce5c3b6eef289672837ddb84c411cd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20cf90d7356f7f28f30b747d0a8eff13"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a20cf90d7356f7f28f30b747d0a8eff13"></a>
+const <a class="el" href="classtree_1_1cpu_1_1vp__tree.html">tree::cpu::vp_tree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1cpu_1_1dbscan.html#a20cf90d7356f7f28f30b747d0a8eff13">tree</a> () const </td></tr>
+<tr class="memdesc:a20cf90d7356f7f28f30b747d0a8eff13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the vp-tree. <br /></td></tr>
+<tr class="separator:a20cf90d7356f7f28f30b747d0a8eff13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d800dca8e071c560c5e22c8327077c0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d800dca8e071c560c5e22c8327077c0"></a>
+<a class="el" href="classtree_1_1cpu_1_1vp__tree.html">tree::cpu::vp_tree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1cpu_1_1dbscan.html#a5d800dca8e071c560c5e22c8327077c0">tree</a> ()</td></tr>
+<tr class="memdesc:a5d800dca8e071c560c5e22c8327077c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the vp-tree. <br /></td></tr>
+<tr class="separator:a5d800dca8e071c560c5e22c8327077c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcluster_1_1dbscan"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcluster_1_1dbscan')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcluster_1_1dbscan.html">cluster::dbscan</a></td></tr>
+<tr class="memitem:a417c95b96d2ace97d6b0294558b93f64 inherit pub_methods_classcluster_1_1dbscan"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a417c95b96d2ace97d6b0294558b93f64"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1dbscan.html#a417c95b96d2ace97d6b0294558b93f64">dbscan</a> ()</td></tr>
+<tr class="memdesc:a417c95b96d2ace97d6b0294558b93f64 inherit pub_methods_classcluster_1_1dbscan"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an empty dbscan clusterer. <br /></td></tr>
+<tr class="separator:a417c95b96d2ace97d6b0294558b93f64 inherit pub_methods_classcluster_1_1dbscan"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af77dacb349da6976a3521297a6b50d0d inherit pub_methods_classcluster_1_1dbscan"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1dbscan.html#af77dacb349da6976a3521297a6b50d0d">dbscan</a> (std::shared_ptr&lt; const std::vector&lt; float &gt;&gt; data, const float <a class="el" href="classcluster_1_1dbscan.html#adffe3dee8aede13ce2068552a38e4bb9">eps</a>, const int <a class="el" href="classcluster_1_1dbscan.html#a5f424fb02ca1d736fb07f9e214a01a65">min_pts</a>, const int dim)</td></tr>
 <tr class="memdesc:af77dacb349da6976a3521297a6b50d0d inherit pub_methods_classcluster_1_1dbscan"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of the clusterer.  <a href="#af77dacb349da6976a3521297a6b50d0d">More...</a><br /></td></tr>
 <tr class="separator:af77dacb349da6976a3521297a6b50d0d inherit pub_methods_classcluster_1_1dbscan"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6beb8bf84f9d9bc5271f280b0ed0e26f inherit pub_methods_classcluster_1_1dbscan"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6beb8bf84f9d9bc5271f280b0ed0e26f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1dbscan.html#a6beb8bf84f9d9bc5271f280b0ed0e26f">fit</a> (std::shared_ptr&lt; const std::vector&lt; float &gt;&gt; data, const int dim)</td></tr>
+<tr class="memdesc:a6beb8bf84f9d9bc5271f280b0ed0e26f inherit pub_methods_classcluster_1_1dbscan"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fits the new data to the dbscan clusterer. <br /></td></tr>
+<tr class="separator:a6beb8bf84f9d9bc5271f280b0ed0e26f inherit pub_methods_classcluster_1_1dbscan"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adffe3dee8aede13ce2068552a38e4bb9 inherit pub_methods_classcluster_1_1dbscan"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adffe3dee8aede13ce2068552a38e4bb9"></a>
 float &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcluster_1_1dbscan.html#adffe3dee8aede13ce2068552a38e4bb9">eps</a> ()</td></tr>
 <tr class="memdesc:adffe3dee8aede13ce2068552a38e4bb9 inherit pub_methods_classcluster_1_1dbscan"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set epsilon value for the DBSCAN algorithm. <br /></td></tr>
@@ -226,7 +258,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Apr 29 2015 15:36:15 for CUDADClusterer by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 30 2015 16:31:16 for CUDADClusterer by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

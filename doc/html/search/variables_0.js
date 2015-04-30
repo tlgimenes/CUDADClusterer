@@ -8,6 +8,7 @@ var searchData=
   ['_5flc',['_lc',['../structtree_1_1vp__node__t.html#a36ac11ce1caaf5d34aab924ee27158f4',1,'tree::vp_node_t']]],
   ['_5fmetric',['_metric',['../classtree_1_1cpu_1_1vp__tree.html#a5ad0a08e0bcc66466e24485f46671a21',1,'tree::cpu::vp_tree']]],
   ['_5fmin_5fpts',['_min_pts',['../classcluster_1_1dbscan.html#aaf6a0241678a63592356ab8e150ee511',1,'cluster::dbscan']]],
+  ['_5fpar',['_par',['../structtree_1_1vp__node__t.html#adaed604524e1fac9424ad51e2b0c4484',1,'tree::vp_node_t']]],
   ['_5frc',['_rc',['../structtree_1_1vp__node__t.html#a733a0e18db87b13307818a3bbec8e154',1,'tree::vp_node_t']]],
-  ['_5ftree',['_tree',['../classcluster_1_1cpu_1_1dbscan.html#a2834cc24b1a05284d8f2d18b3d9f7ae7',1,'cluster::cpu::dbscan::_tree()'],['../classtree_1_1cpu_1_1vp__tree.html#ac5173f60c5365b1b878001822a6aa194',1,'tree::cpu::vp_tree::_tree()']]]
+  ['_5ftree',['_tree',['../classcluster_1_1cpu_1_1dbscan.html#a2834cc24b1a05284d8f2d18b3d9f7ae7',1,'cluster::cpu::dbscan::_tree()'],['../classtree_1_1cpu_1_1vp__tree.html#ada2f4290b6e25b4d4db7421b64690baa',1,'tree::cpu::vp_tree::_tree()']]]
 ];

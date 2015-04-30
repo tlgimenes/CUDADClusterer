@@ -121,13 +121,43 @@ int main(int argc, const char **argv)
     )
 
     std::vector<int> id1, id2;
-    int query = 66, kn = 4;
-    float dist = 0.91;
-    
-    std::cout << console::modifier(console::FG_MAGENTA) << "knn:" << 
+    int query = 132, kn = 5;
+    float dist = 0.51;
+ 
+    std::cout << console::modifier(console::FG_MAGENTA) << "knn epsilon:" << 
+        console::modifier(console::FG_DEFAULT) << std::endl;
+ 
+    TIME_BETWEEN(
+    vptree->stack_knn(query, dist, id1);
+    )
+    print_vec<int>(id1);
+
+    TIME_BETWEEN(
+    vptree->knn(query, dist, id1);
+    )
+    print_vec<int>(id1);
+
+    std::cout << console::modifier(console::FG_MAGENTA) << "brute knn epsilon:" << 
         console::modifier(console::FG_DEFAULT) << std::endl;
     TIME_BETWEEN(
-    //vptree->knn(query, dist, id1);
+    vptree->brute_knn(query, dist, id2);
+    )
+    print_vec<int>(id2);
+
+    if(cmp_vec<int>(id2, id1))
+        DBG_MESSAGE("Brute and knn algorithms are equal ! :)\n");
+    else
+        DBG_MESSAGE("Error in knn algorithm :(\n");
+
+    std::cout << console::modifier(console::FG_MAGENTA) << "knn:" << 
+        console::modifier(console::FG_DEFAULT) << std::endl;
+ 
+    TIME_BETWEEN(
+    vptree->stack_knn(query, kn, id1);
+    )
+    print_vec<int>(id1);
+
+    TIME_BETWEEN(
     vptree->knn(query, kn, id1);
     )
     print_vec<int>(id1);
@@ -135,7 +165,6 @@ int main(int argc, const char **argv)
     std::cout << console::modifier(console::FG_MAGENTA) << "brute knn:" << 
         console::modifier(console::FG_DEFAULT) << std::endl;
     TIME_BETWEEN(
-    //vptree->brute_knn(query, dist, id2);
     vptree->brute_knn(query, kn, id2);
     )
     print_vec<int>(id2);
@@ -144,6 +173,7 @@ int main(int argc, const char **argv)
         DBG_MESSAGE("Brute and knn algorithms are equal ! :)\n");
     else
         DBG_MESSAGE("Error in knn algorithm :(\n");
+
 
     //print_data(data, 123);
 

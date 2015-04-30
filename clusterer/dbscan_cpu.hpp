@@ -23,13 +23,16 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-namespace cluster{
+namespace cluster {
 namespace cpu
 {
     /*! \brief Class for applying DBSCAN clustering algorithm to data */
     class dbscan : public cluster::dbscan
     {
         public:
+            /*! \brief Constructs new empty dbscan clusterer */
+            dbscan() : cluster::dbscan() {}
+
             /*! \brief Constructor of the clusterer 
              *
              * \param data Data array 
@@ -42,11 +45,37 @@ namespace cpu
                     metric::cpu::metric_f metric = metric::cpu::euclidean) : 
                 cluster::dbscan(data, eps, min_pts, dim), _tree(data, dim, metric) {}
 
+            /*! \brief Fits the new data to the dbscan clusterer */
+            inline void fit(std::shared_ptr<const std::vector<float>> data, int dim);
+
+            /*! \brief Get the metric function used in the tree */
+            inline const metric::cpu::metric_f& metric() const {return _tree.metric();}
+
+            /*! \brief Sets the metric function used in the tree */
+            inline metric::cpu::metric_f& metric() {return _tree.metric();}
+
+            /*! \brief Gets the vp-tree */
+            inline const tree::cpu::vp_tree& tree() const {return _tree;}
+            
+            /*! \brief Sets the vp-tree */    
+            inline tree::cpu::vp_tree& tree() {return _tree;}
+
         protected:
             tree::cpu::vp_tree _tree; /*!< \brief VP-tree for the knn search */
     };
 };
 };
+
+///////////////////////////////////////////////////////////////////////////////
+
+inline void cluster::cpu::dbscan::fit(std::shared_ptr<const std::vector<float>> 
+        data, int dim)
+{
+    _data = data;
+    _dim = dim;
+
+    _tree.fit(data, dim);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 

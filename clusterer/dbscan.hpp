@@ -27,6 +27,9 @@ namespace cluster
     class dbscan 
     {
         public:
+            /*! \brief Constructs an empty dbscan clusterer */
+            dbscan() : _eps(0), _min_pts(0), _dim(0), _data() {}
+
             /*! \brief Constructor of the clusterer 
              *
              * \param data Data array 
@@ -36,6 +39,10 @@ namespace cluster
             dbscan(std::shared_ptr<const std::vector<float>> data, 
                     const float eps, const int min_pts, const int dim) :
                 _data(data), _eps(eps), _min_pts(min_pts), _dim(dim) {}
+
+            /*! \brief Fits the new data to the dbscan clusterer */
+            inline void fit(std::shared_ptr<const std::vector<float>> data, 
+                    const int dim);
 
             /*! \brief Set epsilon value for the DBSCAN algorithm */
             inline float& eps() {return _eps;}
@@ -57,6 +64,15 @@ namespace cluster
             std::shared_ptr<const std::vector<float>> _data; /*!< Vector containing data */
     };
 };
+
+///////////////////////////////////////////////////////////////////////////////
+
+inline void cluster::dbscan::fit(std::shared_ptr<const std::vector<float>> 
+        data, const int dim)
+{
+    _data = data;
+    _dim = dim;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
