@@ -74,7 +74,7 @@ namespace cpu
              * \param delta maximum distance exclusive to search
              * \param id ids of elements in data closer to query than delta
              * */
-            inline void stack_knn(int query, float delta, std::vector<int>& id);
+            inline void stack_knn(int query, float delta, std::vector<int>& id) const;
             
             /*!
              * \brief Performs the knn search and returns all elements within the 
@@ -88,7 +88,21 @@ namespace cpu
              * \param delta maximum distance exclusive to search
              * \param id ids of elements in data closer to query than delta
              * */
-            inline void knn(int query, float delta, std::vector<int>& id);
+            inline void knn(int query, float delta, std::vector<int>& id) const;
+
+            /*!
+             * \brief Performs the knn search for each query and returns all
+             * elements within the radius delta 
+             *
+             * This function uses the knn(int, float, vector<int>) as base 
+             *
+             * \param query indexes of each query in the data
+             * \param delta maximum distance exclusive to search
+             * \param ids ids of elements in data closer to query than delta.
+             * For each query, there will be a vector of ids
+             * */
+            inline void knn(const std::vector<int>& query, float delta, 
+                    std::vector<std::vector<int>>& ids) const;
 
             /*!
              * \brief Performs the knn search and returns k elements closest to the 
@@ -97,7 +111,7 @@ namespace cpu
              * This function uses a stack for speeding up the knn search and
              * it's not suitable for parellization in GPGPUs
              * */
-            inline void stack_knn(int query, int k, std::vector<int>& id);
+            inline void stack_knn(int query, int k, std::vector<int>& id) const;
 
             /*!
              * \brief Performs the knn search and returns k elements closest to the 
@@ -108,17 +122,31 @@ namespace cpu
              * slower due to the lack of a stack and the necessity of recomputing
              * distances
              * */
-            inline void knn(int query, int k, std::vector<int>& id);
+            inline void knn(int query, int k, std::vector<int>& id) const;
+ 
+            /*!
+             * \brief Performs the knn search for each query and returns
+             * k elements closest to each query
+             *
+             * This function uses the knn(int, int, vector<int>) as base 
+             *
+             * \param queries indexes of each query in the data
+             * \param k maximum distance exclusive to search
+             * \param ids ids of elements in data closer to query than delta.
+             * For each query, there will be a vector of ids
+             * */
+            inline void knn(const std::vector<int>& queries, int k, 
+                    std::vector<std::vector<int>>& ids) const;
 
             /*!
              * \brief Same function as knn but using the brute force algorithm
              * */
-            inline void brute_knn(int query, float delta, std::vector<int>& id);
+            inline void brute_knn(int query, float delta, std::vector<int>& id) const;
             
             /*!
              * \brief Same function as knn but using the brute force algorithm
              * */
-            inline void brute_knn(int query, int k, std::vector<int>& id);
+            inline void brute_knn(int query, int k, std::vector<int>& id) const;
 
             /*!
              * \brief Finds the query in _data vector and returns its index in the 
@@ -265,7 +293,7 @@ inline void tree::cpu::vp_tree::fit(std::shared_ptr<const std::vector<float>> da
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void tree::cpu::vp_tree::stack_knn(int query, float delta, std::vector<int>& id)
+inline void tree::cpu::vp_tree::stack_knn(int query, float delta, std::vector<int>& id) const
 {
     std::stack<int> stack; // recursion stack
     int cmp = 0; // root 
@@ -296,7 +324,9 @@ inline void tree::cpu::vp_tree::stack_knn(int query, float delta, std::vector<in
     }
 }
 
-inline void tree::cpu::vp_tree::knn(int query, float delta, std::vector<int>& id)
+///////////////////////////////////////////////////////////////////////////////
+
+inline void tree::cpu::vp_tree::knn(int query, float delta, std::vector<int>& id) const
 {
     int iteration = 0;
     register bool go_down = true;
@@ -344,7 +374,16 @@ inline void tree::cpu::vp_tree::knn(int query, float delta, std::vector<int>& id
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void tree::cpu::vp_tree::stack_knn(int query, int k, std::vector<int>& id)
+inline void tree::cpu::vp_tree::knn(const std::vector<int>& queries, float delta, 
+        std::vector<std::vector<int>>& ids) const
+{
+    for (int i=0; i < queries.size(); i++)
+        knn(queries[i], delta, ids[i]);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+inline void tree::cpu::vp_tree::stack_knn(int query, int k, std::vector<int>& id) const
 {
     std::vector<ifloat> heap;
     std::map<int, int> in_heap;
@@ -394,7 +433,7 @@ inline void tree::cpu::vp_tree::stack_knn(int query, int k, std::vector<int>& id
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void tree::cpu::vp_tree::knn(int query, int k, std::vector<int>& id)
+inline void tree::cpu::vp_tree::knn(int query, int k, std::vector<int>& id) const
 {
     register bool go_down = true;
     register int node = 0, parent;
@@ -457,11 +496,18 @@ inline void tree::cpu::vp_tree::knn(int query, int k, std::vector<int>& id)
         id.push_back(heap[i].key());
 }
 
+///////////////////////////////////////////////////////////////////////////////
 
+inline void tree::cpu::vp_tree::knn(const std::vector<int>& queries, int k,
+        std::vector<std::vector<int>>& ids) const
+{
+    for (int i=0; i < queries.size(); i++)
+        knn(queries[i], k, ids[i]);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void tree::cpu::vp_tree::brute_knn(int query, float delta, std::vector<int>& id)
+inline void tree::cpu::vp_tree::brute_knn(int query, float delta, std::vector<int>& id) const
 {
     float dist;
  
@@ -478,7 +524,7 @@ inline void tree::cpu::vp_tree::brute_knn(int query, float delta, std::vector<in
 
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void tree::cpu::vp_tree::brute_knn(int query, int k, std::vector<int>& id)
+inline void tree::cpu::vp_tree::brute_knn(int query, int k, std::vector<int>& id) const
 {
     float dist, max_dist;
     std::vector<ifloat> heap;

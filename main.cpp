@@ -83,6 +83,10 @@ void print_data(const std::vector<float>& data, int max = 20, int dim = 3)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+void test_tree(int query, int kn, float dist, const tree::cpu::vp_tree* vptree);
+
+///////////////////////////////////////////////////////////////////////////////
+
 /* ======= Function ==================================================
  *   Name: main
  *   Description: main entry Function
@@ -116,13 +120,32 @@ int main(int argc, const char **argv)
 
     reader_xtc::read_list(home_dir, trajlist, data, n_atoms);
 
+    std::shared_ptr<const std::vector<float>> shared_data = std::make_shared<const std::vector<float>>(data);
+
     TIME_BETWEEN(
-    tree::cpu::vp_tree* vptree = new tree::cpu::vp_tree(std::make_shared<const std::vector<float>>(data), n_atoms * 3);
+    tree::cpu::vp_tree* vptree = new tree::cpu::vp_tree(shared_data, n_atoms * 3);
     )
 
-    std::vector<int> id1, id2;
-    int query = 132, kn = 5;
     float dist = 0.51;
+    int kn = 5, query = 132;
+    test_tree(query, kn, dist, vptree);
+
+    TIME_BETWEEN(
+    cluster::cpu::dbscan* dbscan = new cluster::cpu::dbscan(shared_data, dist, kn, n_atoms * 3, *vptree);
+    )
+
+    //print_data(data, 123);
+
+    delete (tree::cpu::vp_tree*)vptree;
+
+    return 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void test_tree(int query, int kn, float dist, const tree::cpu::vp_tree* vptree)
+{
+    std::vector<int> id1, id2;
  
     std::cout << console::modifier(console::FG_MAGENTA) << "knn epsilon:" << 
         console::modifier(console::FG_DEFAULT) << std::endl;
@@ -173,14 +196,6 @@ int main(int argc, const char **argv)
         DBG_MESSAGE("Brute and knn algorithms are equal ! :)\n");
     else
         DBG_MESSAGE("Error in knn algorithm :(\n");
-
-
-    //print_data(data, 123);
-
-    delete (tree::cpu::vp_tree*)vptree;
-
-    return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-

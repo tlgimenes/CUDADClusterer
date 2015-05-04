@@ -21,6 +21,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/*! \brief OUTLIERS definition in the assignements */
+#define OUTLIERS -1
+
+///////////////////////////////////////////////////////////////////////////////
+
 namespace cluster
 {
     /*! \brief Base class for applying DBSCAN clustering algorithm to data */
@@ -40,6 +45,10 @@ namespace cluster
                     const float eps, const int min_pts, const int dim) :
                 _data(data), _eps(eps), _min_pts(min_pts), _dim(dim) {}
 
+            /*! \brief Constructs another dbscan based on the others dbscan
+             * data, tree and parameters */
+            dbscan(const dbscan& other);
+
             /*! \brief Fits the new data to the dbscan clusterer */
             inline void fit(std::shared_ptr<const std::vector<float>> data, 
                     const int dim);
@@ -48,11 +57,19 @@ namespace cluster
             inline float& eps() {return _eps;}
             /*! \brief Set minimun points for the DBSCAN algorithm */
             inline int& min_pts() {return _min_pts;}
+            /*! \brief Set data dimention */
+            inline int& dim() {return _dim;}
+            /*! \brief Set data */
+            inline std::shared_ptr<const std::vector<float>>& data() {return _data;}
 
             /*! \brief Get epsilon value of the DBSCAN algorithm */
             inline const float& eps() const {return _eps;}
             /*! \brief Get minimun points of the DBSCAN algorithm */
             inline const int& min_pts() const {return _min_pts;}
+            /*! \brief Get data dimention */
+            inline const int& dim() const {return _dim;}
+            /*! \brief Get data  */
+            inline const std::shared_ptr<const std::vector<float>>& data() const {return _data;}
 
         protected:
             /* Classical DBSCAN Parameters */
@@ -64,6 +81,17 @@ namespace cluster
             std::shared_ptr<const std::vector<float>> _data; /*!< Vector containing data */
     };
 };
+
+///////////////////////////////////////////////////////////////////////////////
+
+inline cluster::dbscan::dbscan(const cluster::dbscan& other) :
+    _eps(other.eps()),
+    _min_pts(other.min_pts()),
+    _dim(other.dim()),
+    _data(other.data())
+{
+    /* Nothing to do here */
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
